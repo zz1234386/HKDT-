@@ -1,54 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>行业动态周报 · 实时更新</title>
+<title>航电机载设备行业周报 · 实时更新</title>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        background: #f1f5fc; color: #0b1e3a; line-height: 1.5;
+        background: #f1f5fc; color: #0b1e3a; line-height: 1.6;
         padding: 1.5rem; min-height: 100vh;
         display: flex; flex-direction: column; align-items: center;
     }
-    .app { max-width: 1280px; width: 100%; }
+    .app { max-width: 1180px; width: 100%; }
 
+    /* ---------- 头部 ---------- */
     .header {
-        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-        margin-bottom: 1.5rem; background: white; padding: 1.25rem 2rem;
-        border-radius: 2rem; box-shadow: 0 8px 20px -8px rgba(0,20,50,.15);
-        border: 1px solid rgba(255,255,255,.6); gap: 1rem;
+        background: white; border-radius: 1.75rem; padding: 1.5rem 2rem;
+        box-shadow: 0 8px 24px -8px rgba(0,20,50,.15);
+        border: 1px solid #fff; margin-bottom: 1.25rem;
     }
-    .title-section h1 {
-        font-size: 2rem; font-weight: 700; letter-spacing: -.02em; color: #0b1e3a;
-        display: flex; align-items: center; gap: .5rem;
+    .header-top {
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
     }
-    .title-section h1 span {
-        background: #eef4ff; color: #1e4faf; font-size: .9rem; font-weight: 500;
+    .header-title h1 {
+        font-size: 1.8rem; font-weight: 700; letter-spacing: -.02em; color: #0b1e3a;
+        display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+    }
+    .header-title h1 .period-badge {
+        background: #eef4ff; color: #1e4faf; font-size: .85rem; font-weight: 600;
         padding: .25rem .9rem; border-radius: 3rem; border: 1px solid #b9d1ff;
     }
-    .title-section .sub {
-        font-size: 1rem; color: #4a5e7c; margin-top: .25rem;
-        display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+    .header-meta {
+        display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .4rem;
+        font-size: .85rem; color: #5e7290;
     }
-    .live-badge {
-        display: inline-flex; align-items: center; gap: .4rem;
-        background: #e6f7e6; color: #0e6b2e; font-size: .8rem; font-weight: 600;
-        padding: .25rem .9rem; border-radius: 3rem; border: 1px solid #a3d9a5;
-    }
-    .live-badge::before { content: "●"; color: #16a34a; font-size: .8rem; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-    .time-stamp {
-        font-size: .9rem; color: #3a5470; background: #eef2f9;
-        padding: .5rem 1.2rem; border-radius: 3rem; font-weight: 500;
+    .header-positioning {
+        margin-top: .7rem; font-size: .82rem; color: #4a5e7c;
+        background: #f8fafd; padding: .55rem 1rem; border-radius: .75rem;
+        border-left: 3px solid #3b82f6;
     }
 
+    /* ---------- 控制栏 ---------- */
     .control-bar {
         display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
-        background: white; padding: 1rem 1.5rem; border-radius: 1.75rem;
+        background: white; padding: 1rem 1.5rem; border-radius: 1.5rem;
         box-shadow: 0 8px 20px -8px rgba(0,20,50,.12);
-        border: 1px solid #fff; margin-bottom: 1.75rem;
+        border: 1px solid #fff; margin-bottom: 1.5rem;
     }
     .period-switch { display: flex; align-items: center; gap: .5rem; }
     .period-switch button {
@@ -60,13 +58,13 @@
     .period-switch button:hover:not(:disabled) { background: #e0eaff; border-color: #3b82f6; }
     .period-switch button:disabled { opacity: .4; cursor: not-allowed; }
     .period-display {
-        font-size: .95rem; font-weight: 600; color: #0b1e3a; padding: .5rem 1rem;
+        font-size: .9rem; font-weight: 600; color: #0b1e3a; padding: .5rem 1rem;
         background: #eef4ff; border-radius: 3rem; border: 1px solid #b9d1ff;
-        min-width: 160px; text-align: center;
+        min-width: 140px; text-align: center;
     }
-    .period-display .date { font-size: .75rem; color: #5e7290; font-weight: 500; display: block; }
+    .period-display .date { font-size: .72rem; color: #5e7290; font-weight: 500; display: block; }
 
-    .search-box { flex: 1; min-width: 200px; position: relative; }
+    .search-box { flex: 1; min-width: 180px; position: relative; }
     .search-box input {
         width: 100%; padding: .6rem 1rem .6rem 2.5rem;
         border: 1px solid #cdddec; border-radius: 3rem; font-size: .9rem;
@@ -89,112 +87,131 @@
     .match-info { font-size: .8rem; color: #5e7290; padding: 0 .5rem; white-space: nowrap; }
     .match-info strong { color: #1e4faf; }
 
-    .grid-four {
-        display: grid; grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem; margin-bottom: 2rem;
+    /* ---------- 卡片通用 ---------- */
+    .card {
+        background: white; border-radius: 1.5rem; padding: 1.5rem 1.75rem;
+        box-shadow: 0 8px 24px -8px rgba(0,20,50,.12);
+        border: 1px solid #fff; margin-bottom: 1.5rem;
+        transition: opacity .2s;
     }
-    .board {
-        background: white; border-radius: 1.75rem; padding: 1.5rem 1.25rem 1.25rem;
-        box-shadow: 0 8px 20px -8px rgba(0,20,50,.12); border: 1px solid #fff;
-        display: flex; flex-direction: column;
-        transition: transform .15s, box-shadow .2s, opacity .2s; height: 100%;
+    .card.dimmed { opacity: .3; }
+    .card-header {
+        display: flex; align-items: center; gap: .6rem; margin-bottom: 1.1rem;
+        padding-bottom: .8rem; border-bottom: 2px solid #e9effa;
     }
-    .board:hover { transform: translateY(-4px); box-shadow: 0 18px 30px -12px rgba(0,40,80,.2); }
-    .board.dimmed { opacity: .35; }
-    .board-header {
-        display: flex; align-items: center; gap: .6rem;
-        margin-bottom: 1.2rem; border-bottom: 2px solid #e9effa; padding-bottom: .8rem;
-    }
-    .board-icon { font-size: 1.6rem; line-height: 1; }
-    .board-header h2 { font-size: 1.2rem; font-weight: 600; color: #1e2e4a; flex: 1; }
-    .board-count {
+    .card-header .icon { font-size: 1.4rem; line-height: 1; }
+    .card-header h2 { font-size: 1.15rem; font-weight: 700; color: #1e2e4a; flex: 1; }
+    .card-header .count {
         font-size: .7rem; background: #eef4ff; color: #1e4faf;
         padding: .15rem .6rem; border-radius: 2rem; font-weight: 600;
     }
-    .board-content { flex: 1; display: flex; flex-direction: column; gap: .9rem; }
-
-    .news-item { padding: .75rem 0; border-bottom: 1px solid #eef2f9; }
-    .news-item:last-child { border-bottom: none; }
-    .news-title { font-weight: 600; font-size: 1rem; color: #0b1e3a; margin-bottom: .25rem; }
-    .news-meta { font-size: .8rem; color: #5e7290; display: flex; gap: .75rem; flex-wrap: wrap; }
-    .tag {
-        background: #eef4ff; padding: .15rem .6rem; border-radius: 2rem;
-        font-size: .7rem; font-weight: 500; color: #1e4faf;
-    }
     mark { background: #fef08a; color: #713f12; padding: 0 2px; border-radius: 3px; font-weight: 600; }
 
-    .data-row {
-        display: flex; justify-content: space-between; align-items: baseline;
-        padding: .4rem 0; gap: .5rem; flex-wrap: wrap;
-    }
-    .data-label { font-size: .9rem; color: #3a5470; flex: 1; min-width: 100px; }
-    .data-value { font-weight: 700; font-size: 1.2rem; color: #0b1e3a; }
-    .data-trend { font-size: .8rem; font-weight: 600; padding: .1rem .5rem; border-radius: 2rem; }
-    .up { background: #e6f7e6; color: #0e6b2e; }
-    .down { background: #fee9e7; color: #b91c1c; }
-    .neutral { background: #f0f3f8; color: #4a5e7c; }
-
-    .insight-text {
-        font-size: .95rem; color: #2c3e5c; background: #f8fafd;
-        padding: .75rem 1rem; border-radius: 1rem;
-        border-left: 3px solid #3b82f6; margin-bottom: .5rem;
-    }
-    .empty-hint { font-size: .85rem; color: #94a3b8; text-align: center; padding: 1rem 0; font-style: italic; }
-
-    .detail-section {
-        margin-top: 2.5rem; background: white; border-radius: 2rem; padding: 2rem;
-        box-shadow: 0 12px 30px -12px rgba(0,20,50,.18);
-        border: 1px solid #fff; transition: opacity .2s;
-    }
-    .detail-section.dimmed { opacity: .35; }
-    .detail-header {
-        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-        margin-bottom: 1.5rem; border-bottom: 2px solid #e2eaf6; padding-bottom: 1rem;
-    }
-    .detail-header h2 {
-        font-size: 1.8rem; font-weight: 700; color: #0b1e3a;
-        display: flex; align-items: center; gap: .6rem;
-    }
-    .detail-header h2::before { content: "📌"; font-size: 1.8rem; }
-    .back-link {
-        color: #3b82f6; font-weight: 600; text-decoration: none;
-        background: #f0f5ff; padding: .4rem 1.2rem; border-radius: 3rem;
-        font-size: .9rem; transition: background .15s; cursor: pointer; border: 1px solid transparent;
-    }
-    .back-link:hover { background: #e0eaff; border-color: #b9d1ff; }
-
-    .detail-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
-    .detail-main p { margin-bottom: 1rem; color: #1e2b41; }
-    .detail-main .focus-headline { font-size: 1.2rem; font-weight: 700; color: #0b1e3a; margin-bottom: .75rem; }
-    .detail-main .highlight {
-        background: #eef4ff; border-radius: 1rem; padding: 1rem 1.5rem;
-        margin: 1.5rem 0; border-left: 4px solid #3b82f6;
-        font-weight: 500; color: #1e3a8a;
-    }
-    .detail-sidebar {
-        background: #f8fafd; border-radius: 1.5rem; padding: 1.25rem;
-        border: 1px solid #dbe7f5;
-    }
-    .detail-sidebar h3 { font-size: 1.1rem; margin-bottom: 1rem; color: #1e2e4a; }
-    .related-item {
-        display: flex; gap: .75rem; padding: .6rem 0;
-        border-bottom: 1px solid #dbe7f5; font-size: .9rem;
-    }
-    .related-item:last-child { border-bottom: none; }
-
-    .footer-update {
-        margin-top: 2.5rem; text-align: center; font-size: .85rem; color: #5e7290;
-        display: flex; justify-content: center; align-items: center; gap: .75rem; flex-wrap: wrap;
-    }
-    .refresh-btn {
-        background: white; border: 1px solid #cdddec; padding: .4rem 1rem;
-        border-radius: 3rem; font-size: .8rem; font-weight: 500; color: #1e4faf;
-        cursor: pointer; transition: all .15s;
+    /* ---------- 核心判断 ---------- */
+    .judgment-status {
         display: inline-flex; align-items: center; gap: .4rem;
+        background: #fff7e6; color: #b45309; border: 1px solid #fcd34d;
+        padding: .25rem .85rem; border-radius: 2rem; font-size: .78rem; font-weight: 600;
+        margin-bottom: .9rem;
     }
-    .refresh-btn:hover { background: #eef4ff; border-color: #3b82f6; }
+    .judgment-headline { font-size: 1.2rem; font-weight: 700; color: #0b1e3a; margin-bottom: .7rem; }
+    .judgment-body {
+        font-size: .92rem; color: #1e2b41; line-height: 1.75;
+        background: #f8fafd; padding: .9rem 1.1rem; border-radius: .9rem;
+        border-left: 4px solid #3b82f6; margin-bottom: .9rem;
+    }
+    .judgment-impact {
+        background: #fff7e6; border: 1px dashed #fcd34d; border-radius: .7rem;
+        padding: .7rem 1rem; font-size: .88rem; color: #92400e; font-weight: 500;
+    }
 
-    /* ========== 要闻详情弹窗 ========== */
+    /* ---------- 数据看板 ---------- */
+    .dash-table { width: 100%; border-collapse: collapse; font-size: .84rem; margin-bottom: .9rem; }
+    .dash-table th {
+        background: #f0f5ff; color: #1e4faf; text-align: left;
+        padding: .55rem .65rem; font-weight: 600; font-size: .78rem;
+        border-bottom: 2px solid #e2eaf6; white-space: nowrap;
+    }
+    .dash-table td { padding: .6rem .65rem; border-bottom: 1px solid #eef2f9; vertical-align: top; color: #1e2b41; }
+    .dash-table tr:last-child td { border-bottom: none; }
+    .dash-table .val { font-weight: 700; color: #0b1e3a; white-space: nowrap; }
+    .dash-table .chg.up { color: #0e6b2e; font-weight: 600; }
+    .dash-table .chg.down { color: #b91c1c; font-weight: 600; }
+    .dash-table .chg.neutral { color: #5e7290; }
+    .dash-table .src { color: #7a8ca8; font-size: .76rem; }
+    .dash-bg { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: .9rem; }
+    .dash-bg span {
+        font-size: .78rem; background: #eef4ff; color: #1e4faf;
+        padding: .3rem .85rem; border-radius: 2rem; border: 1px solid #dbe7f5;
+    }
+    .dash-interpretation {
+        font-size: .88rem; color: #2c3e5c; background: #f8fafd;
+        padding: .85rem 1rem; border-radius: .85rem; border-left: 3px solid #3b82f6;
+    }
+
+    /* ---------- 事件 ---------- */
+    .event-density {
+        display: flex; flex-wrap: wrap; align-items: center; gap: .6rem;
+        margin-bottom: .9rem; font-size: .84rem; color: #4a5e7c;
+    }
+    .event-density .label {
+        background: #f0f5ff; color: #1e4faf; font-weight: 600;
+        padding: .2rem .7rem; border-radius: 2rem; font-size: .76rem;
+    }
+    .event-item {
+        border: 1px solid #e2eaf6; border-radius: .9rem; padding: .9rem 1.1rem;
+        margin-bottom: .7rem; background: #f8fafd;
+        transition: border .15s, box-shadow .15s;
+    }
+    .event-item:hover { border-color: #b9d1ff; box-shadow: 0 4px 12px -6px rgba(59,130,246,.2); }
+    .event-item:last-child { margin-bottom: 0; }
+    .event-title { font-weight: 700; font-size: .92rem; color: #0b1e3a; margin-bottom: .45rem; }
+    .event-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .45rem; }
+    .event-tags .tag {
+        font-size: .68rem; padding: .12rem .55rem; border-radius: 2rem;
+        background: #eef4ff; color: #1e4faf; font-weight: 500;
+    }
+    .event-tags .impact { font-weight: 700; }
+    .event-tags .impact.up { background: #e6f7e6; color: #0e6b2e; }
+    .event-tags .impact.down { background: #fee9e7; color: #b91c1c; }
+    .event-tags .impact.neutral { background: #f0f3f8; color: #4a5e7c; }
+    .event-analysis { font-size: .84rem; color: #2c3e5c; line-height: 1.6; border-top: 1px dashed #dbe7f5; padding-top: .45rem; }
+
+    /* ---------- 证伪 ---------- */
+    .fals-table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+    .fals-table th {
+        background: #f0f5ff; color: #1e4faf; text-align: left;
+        padding: .55rem .55rem; font-weight: 600; font-size: .76rem;
+        border-bottom: 2px solid #e2eaf6; white-space: nowrap;
+    }
+    .fals-table td { padding: .6rem .55rem; border-bottom: 1px solid #eef2f9; vertical-align: top; color: #1e2b41; line-height: 1.5; }
+    .fals-table tr:last-child td { border-bottom: none; }
+    .verdict { display: inline-block; padding: .12rem .55rem; border-radius: 2rem; font-size: .7rem; font-weight: 700; white-space: nowrap; }
+    .verdict.down { background: #fee9e7; color: #b91c1c; }
+    .verdict.up { background: #e6f7e6; color: #0e6b2e; }
+    .verdict.neutral { background: #f0f3f8; color: #4a5e7c; }
+
+    /* ---------- 下周关注 ---------- */
+    .watch-list { display: flex; flex-direction: column; gap: .65rem; }
+    .watch-item {
+        display: flex; gap: .85rem; padding: .85rem .95rem;
+        background: #f8fafd; border-radius: .9rem; border: 1px solid #e2eaf6;
+    }
+    .watch-num {
+        flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+        background: #3b82f6; color: white; font-size: .75rem; font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .watch-title { font-weight: 700; font-size: .9rem; color: #0b1e3a; margin-bottom: .2rem; }
+    .watch-detail { font-size: .83rem; color: #4a5e7c; line-height: 1.6; }
+
+    .disclaimer {
+        font-size: .76rem; color: #7a8ca8; font-style: italic;
+        padding-top: .9rem; border-top: 1px dashed #dbe7f5; line-height: 1.6;
+    }
+    .empty-hint { font-size: .84rem; color: #94a3b8; text-align: center; padding: .9rem 0; font-style: italic; }
+
+    /* ---------- 弹窗 ---------- */
     .modal-overlay {
         display: none; position: fixed; inset: 0;
         background: rgba(11,30,58,.55); backdrop-filter: blur(3px);
@@ -203,105 +220,83 @@
     .modal-overlay.show { display: flex; animation: fadeIn .2s ease; }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
     .modal {
-        background: white; border-radius: 1.75rem; max-width: 720px; width: 100%;
-        max-height: 85vh; overflow-y: auto; padding: 2rem; position: relative;
+        background: white; border-radius: 1.5rem; max-width: 680px; width: 100%;
+        max-height: 85vh; overflow-y: auto; padding: 1.75rem; position: relative;
         box-shadow: 0 25px 60px -12px rgba(0,20,50,.45);
-        animation: slideUp .25s cubic-bezier(.16,1,.3,1);
     }
-    @keyframes slideUp { from{opacity:0;transform:translateY(24px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)} }
     .modal-close {
-        position: absolute; top: 1.25rem; right: 1.25rem;
-        width: 36px; height: 36px; border-radius: 50%;
+        position: absolute; top: 1.1rem; right: 1.1rem;
+        width: 34px; height: 34px; border-radius: 50%;
         border: 1px solid #e2eaf6; background: #f8fafd; color: #3a5470;
-        font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        font-size: .95rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
         transition: all .15s;
     }
-    .modal-close:hover { background: #fee9e7; border-color: #f5c2c0; color: #b91c1c; transform: rotate(90deg); }
-    .modal-header { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; padding-right: 2.5rem; }
+    .modal-close:hover { background: #fee9e7; border-color: #f5c2c0; color: #b91c1c; }
+    .modal-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .7rem; padding-right: 2.2rem; flex-wrap: wrap; }
     .modal-tag {
-        background: #eef4ff; color: #1e4faf; padding: .2rem .75rem;
-        border-radius: 2rem; font-size: .75rem; font-weight: 600; border: 1px solid #b9d1ff;
+        background: #eef4ff; color: #1e4faf; padding: .18rem .7rem;
+        border-radius: 2rem; font-size: .72rem; font-weight: 600; border: 1px solid #b9d1ff;
     }
-    .modal-time { font-size: .8rem; color: #5e7290; }
-    .modal-title {
-        font-size: 1.5rem; font-weight: 700; color: #0b1e3a;
-        line-height: 1.4; margin-bottom: 1rem; letter-spacing: -.01em;
-    }
-    .modal-summary {
-        font-size: 1rem; color: #2c3e5c; background: #eef4ff;
-        border-left: 3px solid #3b82f6; padding: .9rem 1.2rem;
-        border-radius: .75rem; margin-bottom: 1.5rem; font-weight: 500;
-    }
-    .modal-body p { margin-bottom: 1rem; color: #1e2b41; line-height: 1.7; }
-    .modal-source {
-        margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #dbe7f5;
-        font-size: .8rem; color: #7a8ca8; font-style: italic;
-    }
+    .modal-title { font-size: 1.3rem; font-weight: 700; color: #0b1e3a; line-height: 1.4; margin-bottom: .9rem; }
+    .modal-section { font-size: .9rem; color: #1e2b41; line-height: 1.7; margin-bottom: .9rem; }
+    .modal-section-title { font-size: .8rem; font-weight: 700; color: #1e4faf; margin-bottom: .3rem; }
+    .modal-body p { margin-bottom: .7rem; color: #1e2b41; line-height: 1.7; }
+    .modal-source { margin-top: 1rem; padding-top: .8rem; border-top: 1px dashed #dbe7f5; font-size: .76rem; color: #7a8ca8; font-style: italic; }
 
-    .news-item.clickable {
-        cursor: pointer; transition: all .15s; border-radius: .75rem;
-        padding-left: .5rem; padding-right: .5rem;
-        margin-left: -.5rem; margin-right: -.5rem;
-    }
-    .news-item.clickable:hover { background: #f0f5ff; }
-    .news-item.clickable .news-title::after {
-        content: "›"; display: inline-block; margin-left: .4rem;
+    .event-item.clickable { cursor: pointer; }
+    .event-item.clickable:hover { border-color: #3b82f6; }
+    .event-item.clickable .event-title::after {
+        content: "›"; display: inline-block; margin-left: .35rem;
         color: #3b82f6; font-weight: 700; opacity: .5;
-        transition: opacity .15s, transform .15s;
     }
-    .news-item.clickable:hover .news-title::after { opacity: 1; transform: translateX(3px); }
 
-    @media (max-width: 1000px) {
-        .grid-four { grid-template-columns: repeat(2, 1fr); }
-        .detail-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 600px) {
-        .grid-four { grid-template-columns: 1fr; }
-        .header, .control-bar { flex-direction: column; align-items: stretch; }
-        .title-section h1 { font-size: 1.6rem; }
+    .footer { text-align: center; font-size: .78rem; color: #7a8ca8; padding: 1rem 0 .5rem; }
+
+    @media (max-width: 700px) {
+        .header { padding: 1.25rem 1.25rem; }
+        .header-title h1 { font-size: 1.4rem; }
+        .card { padding: 1.25rem 1.25rem; }
+        .dash-table, .fals-table { display: block; overflow-x: auto; white-space: nowrap; }
+        .control-bar { flex-direction: column; align-items: stretch; }
         .period-switch { justify-content: center; }
-        .detail-header { flex-direction: column; align-items: flex-start; gap: .75rem; }
-        .modal { padding: 1.5rem; border-radius: 1.25rem; }
-        .modal-title { font-size: 1.2rem; }
     }
 </style>
 </head>
 <body>
 <div class="app">
     <header class="header">
-        <div class="title-section">
-            <h1 id="pageTitle">行业动态周报 <span>实时</span></h1>
-            <div class="sub">
-                <span class="live-badge">LIVE</span>
-                <span id="pageSubtitle">每周关键趋势 · 实时更新</span>
-                <span id="pagePeriod" style="color:#7a8ca8;"></span>
+        <div class="header-top">
+            <div class="header-title">
+                <h1>
+                    航电机载设备行业周报
+                    <span class="period-badge" id="periodBadge">加载中...</span>
+                </h1>
+                <div class="header-meta">
+                    <span id="dateRange"></span>
+                    <span id="publisher"></span>
+                </div>
             </div>
         </div>
-        <div class="time-stamp" id="currentTime">加载中...</div>
+        <div class="header-positioning" id="positioning"></div>
     </header>
 
     <div class="control-bar">
         <div class="period-switch">
             <button id="prevBtn" title="上一期">◀ 上一期</button>
-            <div class="period-display" id="periodDisplay">
-                第 ? 期
-                <span class="date" id="periodDate"></span>
-            </div>
+            <div class="period-display" id="periodDisplay">第 ? 期<span class="date" id="periodDate"></span></div>
             <button id="nextBtn" title="下一期">下一期 ▶</button>
         </div>
-
         <select class="filter-select" id="issueSelect" title="选择期数"></select>
-
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="搜索关键词（标题、标签、数据、观察…）">
+            <input type="text" id="searchInput" placeholder="搜索关键词（标题、事件、指标、判断…）">
         </div>
         <select class="filter-select" id="boardFilter" title="按板块筛选">
             <option value="all">全部板块</option>
-            <option value="news">📰 本周要闻</option>
-            <option value="metrics">📊 关键数据</option>
-            <option value="insight">🔍 深度观察</option>
-            <option value="previews">📅 下周预告</option>
-            <option value="focus">📌 本周焦点</option>
+            <option value="coreJudgment">🎯 核心判断</option>
+            <option value="dashboard">📊 高频数据</option>
+            <option value="events">📡 事件扫描</option>
+            <option value="falsification">🔍 证伪指标</option>
+            <option value="nextWatch">📅 下周关注</option>
         </select>
         <select class="filter-select" id="tagFilter" title="按标签筛选">
             <option value="all">全部标签</option>
@@ -309,73 +304,74 @@
         <span class="match-info" id="matchInfo"></span>
     </div>
 
-    <div class="grid-four">
-        <div class="board" id="board-news">
-            <div class="board-header">
-                <span class="board-icon">📰</span><h2>本周要闻</h2>
-                <span class="board-count" id="count-news">0</span>
-            </div>
-            <div class="board-content" id="boardNews"></div>
+    <!-- 一、本周核心判断 -->
+    <section class="card" id="card-coreJudgment">
+        <div class="card-header">
+            <span class="icon">🎯</span><h2>一、本周核心判断</h2>
         </div>
-        <div class="board" id="board-metrics">
-            <div class="board-header">
-                <span class="board-icon">📊</span><h2>关键数据</h2>
-                <span class="board-count" id="count-metrics">0</span>
-            </div>
-            <div class="board-content" id="boardData"></div>
-        </div>
-        <div class="board" id="board-insight">
-            <div class="board-header">
-                <span class="board-icon">🔍</span><h2>深度观察</h2>
-            </div>
-            <div class="board-content" id="boardInsight"></div>
-        </div>
-        <div class="board" id="board-previews">
-            <div class="board-header">
-                <span class="board-icon">📅</span><h2>下周预告</h2>
-                <span class="board-count" id="count-previews">0</span>
-            </div>
-            <div class="board-content" id="boardPreview"></div>
-        </div>
-    </div>
-
-    <section class="detail-section" id="detailSection">
-        <div class="detail-header">
-            <h2>深度详情 · 本周焦点</h2>
-            <a href="#" class="back-link" id="backLink">← 返回周报</a>
-        </div>
-        <div class="detail-grid">
-            <div class="detail-main" id="detailMain"></div>
-            <div class="detail-sidebar">
-                <h3>📎 相关阅读</h3>
-                <div id="detailRelated"></div>
-            </div>
-        </div>
+        <div id="coreJudgment"></div>
     </section>
 
-    <div class="footer-update">
-        <span>⏱️ 最后更新：<span id="lastUpdate">刚刚</span></span>
-        <button class="refresh-btn" id="refreshBtn">🔄 刷新内容</button>
-    </div>
+    <!-- 二、高频数据看板 -->
+    <section class="card" id="card-dashboard">
+        <div class="card-header">
+            <span class="icon">📊</span><h2>二、高频数据看板</h2>
+        </div>
+        <div id="dashboard"></div>
+    </section>
+
+    <!-- 三、本周事件扫描 -->
+    <section class="card" id="card-events">
+        <div class="card-header">
+            <span class="icon">📡</span><h2>三、本周事件扫描</h2>
+            <span class="count" id="eventCount">0</span>
+        </div>
+        <div id="events"></div>
+    </section>
+
+    <!-- 四、证伪指标跟踪表 -->
+    <section class="card" id="card-falsification">
+        <div class="card-header">
+            <span class="icon">🔍</span><h2>四、证伪指标跟踪表</h2>
+        </div>
+        <div id="falsification"></div>
+    </section>
+
+    <!-- 五、下周关注 -->
+    <section class="card" id="card-nextWatch">
+        <div class="card-header">
+            <span class="icon">📅</span><h2>五、下周关注</h2>
+        </div>
+        <div id="nextWatch"></div>
+    </section>
+
+    <!-- 免责声明 -->
+    <section class="card" id="card-disclaimer">
+        <div class="disclaimer" id="disclaimer"></div>
+    </section>
+
+    <div class="footer" id="footer"></div>
 </div>
 
-<!-- 要闻详情弹窗 -->
-<div class="modal-overlay" id="newsModal">
+<!-- 事件详情弹窗 -->
+<div class="modal-overlay" id="eventModal">
     <div class="modal" role="dialog" aria-modal="true">
-        <button class="modal-close" id="modalClose" aria-label="关闭">✕</button>
+        <button class="modal-close" id="modalClose">✕</button>
         <div class="modal-header">
-            <span class="modal-tag" id="modalTag"></span>
-            <span class="modal-time" id="modalTime"></span>
+            <span class="modal-tag" id="modalType"></span>
+            <span class="modal-tag" id="modalImpact"></span>
+            <span class="modal-tag" id="modalArea"></span>
         </div>
         <h2 class="modal-title" id="modalTitle"></h2>
-        <div class="modal-summary" id="modalSummary"></div>
-        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-section">
+            <div class="modal-section-title">影响分析</div>
+            <div id="modalAnalysis"></div>
+        </div>
         <div class="modal-source" id="modalSource"></div>
     </div>
 </div>
 
 <script src="data.js"></script>
-
 <script>
 (function() {
     const state = { currentIndex: 0, keyword: '', boardFilter: 'all', tagFilter: 'all' };
@@ -403,233 +399,288 @@
         const lower = String(text == null ? '' : text).toLowerCase();
         return words.some(w => lower.includes(w.toLowerCase()));
     }
-    function getCurrentIssue() { return WEEKLY_DATA.issues[state.currentIndex] || null; }
+    function getIssue() { return WEEKLY_DATA.issues[state.currentIndex] || null; }
 
-    function getFilteredData() {
-        const issue = getCurrentIssue();
+    // 收集当前期所有标签
+    function collectTags(issue) {
+        const set = new Set();
+        (issue.coreJudgment?.tags || []).forEach(t => set.add(t));
+        (issue.dashboard?.indicators || []).forEach(i => i.tag && set.add(i.tag));
+        (issue.events?.list || []).forEach(e => e.tag && set.add(e.tag));
+        (issue.falsification || []).forEach(f => f.tag && set.add(f.tag));
+        (issue.nextWatch || []).forEach(w => w.tag && set.add(w.tag));
+        return [...set];
+    }
+
+    // ---------- 过滤 ----------
+    function getFiltered() {
+        const issue = getIssue();
         if (!issue) return null;
         const kw = state.keyword, board = state.boardFilter, tag = state.tagFilter;
 
-        let news = (issue.news || []).filter(item => {
-            if (tag !== 'all' && item.tag !== tag) return false;
-            if (kw && !matchesKeyword(item.title, kw) && !matchesKeyword(item.tag, kw)) return false;
-            return true;
-        });
+        const tagMatch = t => tag === 'all' || t === tag;
+        const kwMatch = (...texts) => !kw || texts.some(t => matchesKeyword(t, kw));
 
-        let metrics = (issue.metrics || []).filter(item => {
-            if (kw && !matchesKeyword(item.label, kw) && !matchesKeyword(item.value, kw)) return false;
-            return true;
-        });
+        // 核心判断
+        let coreJudgment = null, cjVisible = true;
+        const cj = issue.coreJudgment || {};
+        if (board !== 'all' && board !== 'coreJudgment') cjVisible = false;
+        if (tag !== 'all' && !(cj.tags || []).includes(tag)) cjVisible = false;
+        if (kw && !kwMatch(cj.headline, cj.status, cj.body, cj.impact, ...(cj.tags || []))) cjVisible = false;
+        if (cjVisible) coreJudgment = cj;
 
-        let insight = issue.insight || {};
-        let insightVisible = true;
-        if (kw && !matchesKeyword(insight.text, kw) && !matchesKeyword(insight.source, kw)) insightVisible = false;
-        if (board !== 'all' && board !== 'insight') insightVisible = false;
+        // 数据
+        let indicators = (issue.dashboard?.indicators || []).filter(i =>
+            tagMatch(i.tag) && kwMatch(i.name, i.value, i.change, i.source)
+        );
+        let bg = (issue.dashboard?.background || []);
+        let interp = issue.dashboard?.interpretation || '';
+        let dashVisible = (board === 'all' || board === 'dashboard') &&
+            (indicators.length > 0 || (!kw && !tag) || (kw && kwMatch(interp, ...bg)));
+        if (board !== 'all' && board !== 'dashboard') dashVisible = false;
 
-        let previews = (issue.previews || []).filter(item => {
-            if (kw && !matchesKeyword(item.title, kw) && !matchesKeyword(item.meta, kw)) return false;
-            return true;
-        });
+        // 事件
+        let events = (issue.events?.list || []).filter(e =>
+            tagMatch(e.tag) && kwMatch(e.title, e.type, e.impact, e.area, e.analysis)
+        );
+        let eventsVisible = (board === 'all' || board === 'events') && (events.length > 0 || (!kw && !tag));
 
-        let focus = issue.focus || {};
-        let focusVisible = true;
-        if (kw) {
-            const focusText = [focus.headline, focus.summary, focus.highlight, ...(focus.body || []), ...(focus.related || []).map(r => r.text)].join(' ');
-            if (!matchesKeyword(focusText, kw)) focusVisible = false;
-        }
-        if (board !== 'all' && board !== 'focus') focusVisible = false;
+        // 证伪
+        let fals = (issue.falsification || []).filter(f =>
+            tagMatch(f.tag) && kwMatch(f.indicator, f.previous, f.current, f.verdict, f.nextWatch)
+        );
+        let falsVisible = (board === 'all' || board === 'falsification') && (fals.length > 0 || (!kw && !tag));
 
-        return { issue, news, metrics, insight, insightVisible, previews, focus, focusVisible };
+        // 下周关注
+        let watch = (issue.nextWatch || []).filter(w =>
+            tagMatch(w.tag) && kwMatch(w.title, w.detail)
+        );
+        let watchVisible = (board === 'all' || board === 'nextWatch') && (watch.length > 0 || (!kw && !tag));
+
+        return { issue, coreJudgment, cjVisible, indicators, bg, interp, dashVisible, events, eventsVisible, fals, falsVisible, watch, watchVisible };
     }
 
-    // 渲染要闻（带弹窗）
-    function renderNews(data) {
-        const el = document.getElementById('boardNews');
-        const cnt = document.getElementById('count-news');
-        if (!el) return;
-        if (!data.news.length) {
-            el.innerHTML = '<div class="empty-hint">暂无匹配要闻</div>';
-            cnt.textContent = '0';
-            return;
-        }
-        el.innerHTML = data.news.map((n, i) => {
-            const clickable = n.detail ? 'clickable' : '';
-            return `
-                <div class="news-item ${clickable}" data-news-index="${i}">
-                    <div class="news-title">${highlight(n.title, state.keyword)}</div>
-                    <div class="news-meta">
-                        <span class="tag">${escapeHtml(n.tag || '')}</span>
-                        ${escapeHtml(n.time || '')}
-                    </div>
-                </div>`;
-        }).join('');
-        cnt.textContent = data.news.length;
+    // ---------- 渲染 ----------
+    function renderHeader(issue) {
+        document.getElementById('periodBadge').textContent = issue.period || '';
+        document.getElementById('dateRange').textContent = issue.dateRange || '';
+        document.getElementById('publisher').textContent = issue.publisher || '';
+        document.getElementById('positioning').innerHTML = '<strong>周报定位：</strong>' + escapeHtml(issue.positioning || '');
+        document.getElementById('footer').textContent = `${issue.publisher || ''} · ${issue.dateRange || ''}`;
+    }
 
-        el.querySelectorAll('.news-item.clickable').forEach(itemEl => {
+    function renderCoreJudgment(data) {
+        const card = document.getElementById('card-coreJudgment');
+        const el = document.getElementById('coreJudgment');
+        if (!data.cjVisible) { card.classList.add('dimmed'); el.innerHTML = '<div class="empty-hint">暂无匹配内容</div>'; return; }
+        card.classList.remove('dimmed');
+        const cj = data.coreJudgment;
+        el.innerHTML = `
+            <div class="judgment-status">⚠️ ${highlight(cj.status, state.keyword)}</div>
+            <div class="judgment-headline">${highlight(cj.headline, state.keyword)}</div>
+            <div class="judgment-body">${highlight(cj.body, state.keyword)}</div>
+            <div class="judgment-impact"><strong>影响判断：</strong>${highlight(cj.impact, state.keyword)}</div>
+        `;
+    }
+
+    function renderDashboard(data) {
+        const card = document.getElementById('card-dashboard');
+        const el = document.getElementById('dashboard');
+        if (!data.dashVisible) { card.classList.add('dimmed'); el.innerHTML = '<div class="empty-hint">暂无匹配数据</div>'; return; }
+        card.classList.remove('dimmed');
+
+        const rows = data.indicators.map(ind => `
+            <tr>
+                <td>${highlight(ind.name, state.keyword)}</td>
+                <td class="val">${highlight(ind.value, state.keyword)}</td>
+                <td class="chg ${ind.trendClass || 'neutral'}">${highlight(ind.change, state.keyword)}</td>
+                <td>${escapeHtml(ind.freq)}</td>
+                <td class="src">${escapeHtml(ind.source)}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="5" class="empty-hint">暂无匹配指标</td></tr>';
+
+        const bgHtml = data.bg.map(b => `<span>${highlight(b, state.keyword)}</span>`).join('');
+
+        el.innerHTML = `
+            <table class="dash-table">
+                <thead><tr><th>指标</th><th>本周值</th><th>较上周/上期</th><th>数据频率</th><th>来源</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+            <div class="dash-bg">${bgHtml}</div>
+            <div class="dash-interpretation"><strong>数据判读：</strong>${highlight(data.interp, state.keyword)}</div>
+        `;
+    }
+
+    function renderEvents(data) {
+        const card = document.getElementById('card-events');
+        const el = document.getElementById('events');
+        const cnt = document.getElementById('eventCount');
+        if (!data.eventsVisible) { card.classList.add('dimmed'); el.innerHTML = '<div class="empty-hint">暂无匹配事件</div>'; cnt.textContent = '0'; return; }
+        card.classList.remove('dimmed');
+        cnt.textContent = data.events.length;
+
+        const issue = data.issue;
+        const densityHtml = `
+            <div class="event-density">
+                <span class="label">事件密度：${escapeHtml(issue.events?.density || '—')}</span>
+                <span>${highlight(issue.events?.densityNote || '', state.keyword)}</span>
+            </div>
+        `;
+
+        const itemsHtml = data.events.map(e => `
+            <div class="event-item clickable" data-event-title="${escapeHtml(e.title)}">
+                <div class="event-title">${highlight(e.title, state.keyword)}</div>
+                <div class="event-tags">
+                    <span class="tag">${escapeHtml(e.type)}</span>
+                    <span class="tag impact ${e.impactClass || 'neutral'}">${escapeHtml(e.impact)}</span>
+                    <span class="tag">${escapeHtml(e.area)}</span>
+                </div>
+                <div class="event-analysis">${highlight(e.analysis, state.keyword)}</div>
+            </div>
+        `).join('') || '<div class="empty-hint">暂无匹配事件</div>';
+
+        el.innerHTML = densityHtml + itemsHtml;
+
+        el.querySelectorAll('.event-item.clickable').forEach(itemEl => {
             itemEl.addEventListener('click', () => {
-                const idx = parseInt(itemEl.dataset.newsIndex, 10);
-                openNewsModal(data.news[idx]);
+                const title = itemEl.dataset.eventTitle;
+                const ev = data.events.find(x => x.title === title);
+                if (ev) openEventModal(ev, data.issue);
             });
         });
     }
 
-    function renderMetrics(data) {
-        const el = document.getElementById('boardData');
-        const cnt = document.getElementById('count-metrics');
-        if (!el) return;
-        if (!data.metrics.length) { el.innerHTML = '<div class="empty-hint">暂无匹配数据</div>'; cnt.textContent = '0'; return; }
-        el.innerHTML = data.metrics.map(m => `
-            <div class="data-row">
-                <span class="data-label">${highlight(m.label, state.keyword)}</span>
-                <span class="data-value">${highlight(m.value, state.keyword)}</span>
-                <span class="data-trend ${m.trendClass || 'neutral'}">${escapeHtml(m.trend || '')}</span>
-            </div>`).join('');
-        cnt.textContent = data.metrics.length;
-    }
+    function renderFalsification(data) {
+        const card = document.getElementById('card-falsification');
+        const el = document.getElementById('falsification');
+        if (!data.falsVisible) { card.classList.add('dimmed'); el.innerHTML = '<div class="empty-hint">暂无匹配指标</div>'; return; }
+        card.classList.remove('dimmed');
 
-    function renderInsight(data) {
-        const el = document.getElementById('boardInsight');
-        if (!el) return;
-        if (!data.insightVisible) { el.innerHTML = '<div class="empty-hint">暂无匹配观察</div>'; return; }
+        const rows = data.fals.map(f => `
+            <tr>
+                <td><strong>${highlight(f.indicator, state.keyword)}</strong></td>
+                <td>${highlight(f.previous, state.keyword)}</td>
+                <td>${highlight(f.current, state.keyword)}</td>
+                <td><span class="verdict ${f.verdictClass || 'neutral'}">${escapeHtml(f.verdict)}</span></td>
+                <td>${highlight(f.nextWatch, state.keyword)}</td>
+            </tr>
+        `).join('') || '<tr><td colspan="5" class="empty-hint">暂无匹配指标</td></tr>';
+
         el.innerHTML = `
-            <div class="insight-text">${highlight(data.insight.text || '', state.keyword)}</div>
-            <div class="news-meta" style="margin-top:.5rem;">${highlight(data.insight.source || '', state.keyword)}</div>`;
+            <table class="fals-table">
+                <thead><tr><th>跟踪指标</th><th>上期判断</th><th>本周状态</th><th>判定</th><th>下期观察点</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
     }
 
-    function renderPreviews(data) {
-        const el = document.getElementById('boardPreview');
-        const cnt = document.getElementById('count-previews');
-        if (!el) return;
-        if (!data.previews.length) { el.innerHTML = '<div class="empty-hint">暂无匹配预告</div>'; cnt.textContent = '0'; return; }
-        el.innerHTML = data.previews.map(p => `
-            <div class="news-item">
-                <div class="news-title">${highlight(p.title, state.keyword)}</div>
-                <div class="news-meta">${highlight(p.meta || '', state.keyword)}</div>
-            </div>`).join('');
-        cnt.textContent = data.previews.length;
+    function renderNextWatch(data) {
+        const card = document.getElementById('card-nextWatch');
+        const el = document.getElementById('nextWatch');
+        if (!data.watchVisible) { card.classList.add('dimmed'); el.innerHTML = '<div class="empty-hint">暂无匹配关注</div>'; return; }
+        card.classList.remove('dimmed');
+
+        el.innerHTML = `<div class="watch-list">${data.watch.map((w, i) => `
+            <div class="watch-item">
+                <div class="watch-num">${i + 1}</div>
+                <div>
+                    <div class="watch-title">${highlight(w.title, state.keyword)}</div>
+                    <div class="watch-detail">${highlight(w.detail, state.keyword)}</div>
+                </div>
+            </div>
+        `).join('')}</div>`;
     }
 
-    function renderDetail(data) {
-        const main = document.getElementById('detailMain');
-        const rel = document.getElementById('detailRelated');
-        const sec = document.getElementById('detailSection');
-        if (!main || !rel) return;
-        if (!data.focusVisible) {
-            sec.classList.add('dimmed');
-            main.innerHTML = '<div class="empty-hint">暂无匹配焦点内容</div>';
-            rel.innerHTML = '';
-            return;
-        }
-        sec.classList.remove('dimmed');
-        const f = data.focus;
-        const bodyHtml = (f.body || []).map(p => `<p>${highlight(p, state.keyword)}</p>`).join('');
-        main.innerHTML = `
-            <div class="focus-headline">${highlight(f.headline || '', state.keyword)}</div>
-            <p>${highlight(f.summary || '', state.keyword)}</p>
-            ${f.highlight ? `<div class="highlight">${highlight(f.highlight, state.keyword)}</div>` : ''}
-            ${bodyHtml}`;
-        rel.innerHTML = (f.related || []).map(r => `
-            <div class="related-item">
-                <span>${escapeHtml(r.emoji || '📄')}</span>
-                <span>${highlight(r.text || '', state.keyword)}</span>
-            </div>`).join('') || '<div class="empty-hint">暂无相关阅读</div>';
+    function renderDisclaimer(issue) {
+        document.getElementById('disclaimer').textContent = issue.disclaimer || '';
     }
 
-    // 打开要闻详情弹窗
-    function openNewsModal(news) {
-        if (!news || !news.detail) return;
-        const d = news.detail;
+    // ---------- 弹窗 ----------
+    function openEventModal(ev, issue) {
+        document.getElementById('modalType').textContent = ev.type || '';
+        document.getElementById('modalImpact').textContent = ev.impact || '';
+        document.getElementById('modalArea').textContent = ev.area || '';
+        document.getElementById('modalTitle').textContent = ev.title || '';
+        document.getElementById('modalAnalysis').textContent = ev.analysis || '';
+        document.getElementById('modalSource').textContent = issue.publisher ? `来源：${issue.publisher}` : '';
 
-        document.getElementById('modalTag').textContent = news.tag || '';
-        document.getElementById('modalTime').textContent = news.time || '';
-        document.getElementById('modalTitle').textContent = news.title || '';
-        document.getElementById('modalSummary').textContent = d.summary || '';
-
-        const bodyEl = document.getElementById('modalBody');
-        if (d.body && d.body.length) {
-            bodyEl.innerHTML = d.body.map(p => `<p>${escapeHtml(p)}</p>`).join('');
-        } else {
-            bodyEl.innerHTML = '<p>暂无详细内容</p>';
-        }
-
-        document.getElementById('modalSource').textContent = d.source ? `来源：${d.source}` : '';
-
-        const overlay = document.getElementById('newsModal');
+        const overlay = document.getElementById('eventModal');
         overlay.classList.add('show');
         document.body.style.overflow = 'hidden';
     }
-
-    function closeNewsModal() {
-        const overlay = document.getElementById('newsModal');
-        overlay.classList.remove('show');
+    function closeModal() {
+        document.getElementById('eventModal').classList.remove('show');
         document.body.style.overflow = '';
     }
 
-    function updatePeriodUI() {
-        const issue = getCurrentIssue();
-        const total = WEEKLY_DATA.issues.length;
-        document.getElementById('periodDisplay').innerHTML =
-            `${issue ? escapeHtml(issue.period) : '无数据'}<span class="date">${issue ? escapeHtml(issue.publishDate || '') : ''}</span>`;
-        document.getElementById('prevBtn').disabled = state.currentIndex >= total - 1;
-        document.getElementById('nextBtn').disabled = state.currentIndex <= 0;
-        const periodEl = document.getElementById('pagePeriod');
-        if (periodEl) periodEl.textContent = issue ? `· ${escapeHtml(issue.period)}` : '';
-        syncIssueSelect();
+    // ---------- 期数切换 UI ----------
+    function buildIssueOptions() {
+        const sel = document.getElementById('issueSelect');
+        sel.innerHTML = WEEKLY_DATA.issues.map((i, idx) =>
+            `<option value="${idx}">${escapeHtml(i.period)} ${escapeHtml(i.dateRange || '')}</option>`
+        ).join('');
+        sel.value = state.currentIndex;
     }
-
     function buildTagOptions() {
-        const issue = getCurrentIssue();
+        const issue = getIssue();
         const sel = document.getElementById('tagFilter');
         sel.innerHTML = '<option value="all">全部标签</option>';
         if (!issue) return;
-        const tags = [...new Set((issue.news || []).map(n => n.tag).filter(Boolean))];
-        tags.forEach(t => {
+        collectTags(issue).forEach(t => {
             const opt = document.createElement('option');
             opt.value = t; opt.textContent = t;
             sel.appendChild(opt);
         });
+        sel.value = state.tagFilter;
     }
-
-    function buildIssueOptions() {
-        const sel = document.getElementById('issueSelect');
-        if (!sel) return;
-        sel.innerHTML = WEEKLY_DATA.issues.map((issue, idx) =>
-            `<option value="${idx}">${escapeHtml(issue.period || '第 ' + (idx + 1) + ' 期')}</option>`
-        ).join('');
-        sel.value = state.currentIndex;
-    }
-
-    function syncIssueSelect() {
+    function updatePeriodUI() {
+        const issue = getIssue();
+        const total = WEEKLY_DATA.issues.length;
+        document.getElementById('periodDisplay').innerHTML =
+            `${escapeHtml(issue.period || '')}<span class="date">${escapeHtml(issue.dateRange || '')}</span>`;
+        document.getElementById('prevBtn').disabled = state.currentIndex >= total - 1;
+        document.getElementById('nextBtn').disabled = state.currentIndex <= 0;
         const sel = document.getElementById('issueSelect');
         if (sel) sel.value = state.currentIndex;
     }
 
     function renderAll() {
-        const data = getFilteredData();
+        const data = getFiltered();
         if (!data) return;
-        renderNews(data);
-        renderMetrics(data);
-        renderInsight(data);
-        renderPreviews(data);
-        renderDetail(data);
+        renderHeader(data.issue);
+        renderCoreJudgment(data);
+        renderDashboard(data);
+        renderEvents(data);
+        renderFalsification(data);
+        renderNextWatch(data);
+        renderDisclaimer(data.issue);
         updatePeriodUI();
 
-        const total = data.news.length + data.metrics.length + (data.insightVisible ? 1 : 0) + data.previews.length + (data.focusVisible ? 1 : 0);
-        document.getElementById('matchInfo').innerHTML = (state.keyword || state.tagFilter !== 'all' || state.boardFilter !== 'all')
-            ? `匹配 <strong>${total}</strong> 条` : '';
+        const total = (data.cjVisible ? 1 : 0) + data.indicators.length + data.events.length + data.fals.length + data.watch.length;
+        document.getElementById('matchInfo').innerHTML =
+            (state.keyword || state.tagFilter !== 'all' || state.boardFilter !== 'all')
+                ? `匹配 <strong>${total}</strong> 条` : '';
     }
 
+    // ---------- 事件绑定 ----------
     function bindEvents() {
         document.getElementById('prevBtn').addEventListener('click', () => {
             if (state.currentIndex < WEEKLY_DATA.issues.length - 1) {
                 state.currentIndex++; state.tagFilter = 'all';
-                buildTagOptions(); renderAll(); syncIssueSelect();
+                buildTagOptions(); renderAll();
             }
         });
         document.getElementById('nextBtn').addEventListener('click', () => {
             if (state.currentIndex > 0) {
                 state.currentIndex--; state.tagFilter = 'all';
-                buildTagOptions(); renderAll(); syncIssueSelect();
+                buildTagOptions(); renderAll();
+            }
+        });
+        document.getElementById('issueSelect').addEventListener('change', e => {
+            const idx = parseInt(e.target.value, 10);
+            if (!isNaN(idx) && idx >= 0 && idx < WEEKLY_DATA.issues.length) {
+                state.currentIndex = idx; state.tagFilter = 'all';
+                buildTagOptions(); renderAll();
             }
         });
         document.getElementById('searchInput').addEventListener('input', e => {
@@ -641,59 +692,25 @@
         document.getElementById('tagFilter').addEventListener('change', e => {
             state.tagFilter = e.target.value; renderAll();
         });
-        document.getElementById('refreshBtn').addEventListener('click', () => {
-            renderAll();
-            document.getElementById('lastUpdate').textContent = '刚刚';
-        });
-        document.getElementById('backLink').addEventListener('click', e => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // 期数下拉框
-        const issueSel = document.getElementById('issueSelect');
-        if (issueSel) {
-            issueSel.addEventListener('change', e => {
-                const idx = parseInt(e.target.value, 10);
-                if (!isNaN(idx) && idx >= 0 && idx < WEEKLY_DATA.issues.length) {
-                    state.currentIndex = idx;
-                    state.tagFilter = 'all';
-                    buildTagOptions(); renderAll(); syncIssueSelect();
-                }
-            });
-        }
-
         // 弹窗关闭
-        const modalOverlay = document.getElementById('newsModal');
-        const modalClose = document.getElementById('modalClose');
-        if (modalClose) modalClose.addEventListener('click', closeNewsModal);
-        if (modalOverlay) {
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) closeNewsModal();
-            });
-        }
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modalOverlay.classList.contains('show')) closeNewsModal();
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('eventModal').addEventListener('click', e => {
+            if (e.target.id === 'eventModal') closeModal();
         });
-    }
-
-    function updateClock() {
-        const el = document.getElementById('currentTime');
-        if (el) el.textContent = new Date().toLocaleString('zh-CN');
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && document.getElementById('eventModal').classList.contains('show')) closeModal();
+        });
     }
 
     function init() {
         if (typeof WEEKLY_DATA === 'undefined' || !WEEKLY_DATA.issues || !WEEKLY_DATA.issues.length) {
-            document.getElementById('boardNews').innerHTML = '<div class="empty-hint">⚠️ 数据加载失败，请检查 data.js 是否正确引入</div>';
-            console.error('WEEKLY_DATA 未加载');
+            document.body.innerHTML = '<div style="padding:3rem;text-align:center;color:#b91c1c;font-family:sans-serif;">⚠️ 数据加载失败，请检查 data.js 是否正确引入</div>';
             return;
         }
         buildIssueOptions();
         buildTagOptions();
         renderAll();
         bindEvents();
-        updateClock();
-        setInterval(updateClock, 1000);
     }
 
     window.addEventListener('DOMContentLoaded', init);
