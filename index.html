@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行业动态周报 · 实时更新</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        background: #f1f5fc; color: #0b1e3a; line-height: 1.5;
+        padding: 1.5rem; min-height: 100vh;
+        display: flex; flex-direction: column; align-items: center;
+    }
+    .app { max-width: 1280px; width: 100%; }
+
+    .header {
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+        margin-bottom: 1.5rem; background: white; padding: 1.25rem 2rem;
+        border-radius: 2rem; box-shadow: 0 8px 20px -8px rgba(0,20,50,.15);
+        border: 1px solid rgba(255,255,255,.6); gap: 1rem;
+    }
+    .title-section h1 {
+        font-size: 2rem; font-weight: 700; letter-spacing: -.02em; color: #0b1e3a;
+        display: flex; align-items: center; gap: .5rem;
+    }
+    .title-section h1 span {
+        background: #eef4ff; color: #1e4faf; font-size: .9rem; font-weight: 500;
+        padding: .25rem .9rem; border-radius: 3rem; border: 1px solid #b9d1ff;
+    }
+    .title-section .sub {
+        font-size: 1rem; color: #4a5e7c; margin-top: .25rem;
+        display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+    }
+    .live-badge {
+        display: inline-flex; align-items: center; gap: .4rem;
+        background: #e6f7e6; color: #0e6b2e; font-size: .8rem; font-weight: 600;
+        padding: .25rem .9rem; border-radius: 3rem; border: 1px solid #a3d9a5;
+    }
+    .live-badge::before { content: "●"; color: #16a34a; font-size: .8rem; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .time-stamp {
+        font-size: .9rem; color: #3a5470; background: #eef2f9;
+        padding: .5rem 1.2rem; border-radius: 3rem; font-weight: 500;
+    }
+
+    .control-bar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
+        background: white; padding: 1rem 1.5rem; border-radius: 1.75rem;
+        box-shadow: 0 8px 20px -8px rgba(0,20,50,.12);
+        border: 1px solid #fff; margin-bottom: 1.75rem;
+    }
+    .period-switch { display: flex; align-items: center; gap: .5rem; }
+    .period-switch button {
+        background: #f0f5ff; border: 1px solid #cdddec; color: #1e4faf;
+        padding: .5rem 1rem; border-radius: 3rem; font-size: .85rem; font-weight: 600;
+        cursor: pointer; transition: all .15s;
+        display: inline-flex; align-items: center; gap: .3rem;
+    }
+    .period-switch button:hover:not(:disabled) { background: #e0eaff; border-color: #3b82f6; }
+    .period-switch button:disabled { opacity: .4; cursor: not-allowed; }
+    .period-display {
+        font-size: .95rem; font-weight: 600; color: #0b1e3a; padding: .5rem 1rem;
+        background: #eef4ff; border-radius: 3rem; border: 1px solid #b9d1ff;
+        min-width: 160px; text-align: center;
+    }
+    .period-display .date { font-size: .75rem; color: #5e7290; font-weight: 500; display: block; }
+
+    .search-box { flex: 1; min-width: 200px; position: relative; }
+    .search-box input {
+        width: 100%; padding: .6rem 1rem .6rem 2.5rem;
+        border: 1px solid #cdddec; border-radius: 3rem; font-size: .9rem;
+        outline: none; transition: border .15s, box-shadow .15s;
+        background: #f8fafd; color: #0b1e3a;
+    }
+    .search-box input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.15); background: white; }
+    .search-box::before {
+        content: "🔍"; position: absolute; left: 1rem; top: 50%;
+        transform: translateY(-50%); font-size: .9rem; pointer-events: none; z-index: 1;
+    }
+
+    .filter-select {
+        padding: .6rem 1rem; border: 1px solid #cdddec; border-radius: 3rem;
+        font-size: .85rem; background: #f8fafd; color: #0b1e3a; cursor: pointer;
+        outline: none; font-weight: 500; transition: border .15s;
+    }
+    .filter-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
+
+    .match-info { font-size: .8rem; color: #5e7290; padding: 0 .5rem; white-space: nowrap; }
+    .match-info strong { color: #1e4faf; }
+
+    .grid-four {
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem; margin-bottom: 2rem;
+    }
+    .board {
+        background: white; border-radius: 1.75rem; padding: 1.5rem 1.25rem 1.25rem;
+        box-shadow: 0 8px 20px -8px rgba(0,20,50,.12); border: 1px solid #fff;
+        display: flex; flex-direction: column;
+        transition: transform .15s, box-shadow .2s, opacity .2s; height: 100%;
+    }
+    .board:hover { transform: translateY(-4px); box-shadow: 0 18px 30px -12px rgba(0,40,80,.2); }
+    .board.dimmed { opacity: .35; }
+    .board-header {
+        display: flex; align-items: center; gap: .6rem;
+        margin-bottom: 1.2rem; border-bottom: 2px solid #e9effa; padding-bottom: .8rem;
+    }
+    .board-icon { font-size: 1.6rem; line-height: 1; }
+    .board-header h2 { font-size: 1.2rem; font-weight: 600; color: #1e2e4a; flex: 1; }
+    .board-count {
+        font-size: .7rem; background: #eef4ff; color: #1e4faf;
+        padding: .15rem .6rem; border-radius: 2rem; font-weight: 600;
+    }
+    .board-content { flex: 1; display: flex; flex-direction: column; gap: .9rem; }
+
+    .news-item { padding: .75rem 0; border-bottom: 1px solid #eef2f9; }
+    .news-item:last-child { border-bottom: none; }
+    .news-title { font-weight: 600; font-size: 1rem; color: #0b1e3a; margin-bottom: .25rem; }
+    .news-meta { font-size: .8rem; color: #5e7290; display: flex; gap: .75rem; flex-wrap: wrap; }
+    .tag {
+        background: #eef4ff; padding: .15rem .6rem; border-radius: 2rem;
+        font-size: .7rem; font-weight: 500; color: #1e4faf;
+    }
+    mark { background: #fef08a; color: #713f12; padding: 0 2px; border-radius: 3px; font-weight: 600; }
+
+    .data-row {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: .4rem 0; gap: .5rem; flex-wrap: wrap;
+    }
+    .data-label { font-size: .9rem; color: #3a5470; flex: 1; min-width: 100px; }
+    .data-value { font-weight: 700; font-size: 1.2rem; color: #0b1e3a; }
+    .data-trend { font-size: .8rem; font-weight: 600; padding: .1rem .5rem; border-radius: 2rem; }
+    .up { background: #e6f7e6; color: #0e6b2e; }
+    .down { background: #fee9e7; color: #b91c1c; }
+    .neutral { background: #f0f3f8; color: #4a5e7c; }
+
+    .insight-text {
+        font-size: .95rem; color: #2c3e5c; background: #f8fafd;
+        padding: .75rem 1rem; border-radius: 1rem;
+        border-left: 3px solid #3b82f6; margin-bottom: .5rem;
+    }
+    .empty-hint { font-size: .85rem; color: #94a3b8; text-align: center; padding: 1rem 0; font-style: italic; }
+
+    .detail-section {
+        margin-top: 2.5rem; background: white; border-radius: 2rem; padding: 2rem;
+        box-shadow: 0 12px 30px -12px rgba(0,20,50,.18);
+        border: 1px solid #fff; transition: opacity .2s;
+    }
+    .detail-section.dimmed { opacity: .35; }
+    .detail-header {
+        display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+        margin-bottom: 1.5rem; border-bottom: 2px solid #e2eaf6; padding-bottom: 1rem;
+    }
+    .detail-header h2 {
+        font-size: 1.8rem; font-weight: 700; color: #0b1e3a;
+        display: flex; align-items: center; gap: .6rem;
+    }
+    .detail-header h2::before { content: "📌"; font-size: 1.8rem; }
+    .back-link {
+        color: #3b82f6; font-weight: 600; text-decoration: none;
+        background: #f0f5ff; padding: .4rem 1.2rem; border-radius: 3rem;
+        font-size: .9rem; transition: background .15s; cursor: pointer; border: 1px solid transparent;
+    }
+    .back-link:hover { background: #e0eaff; border-color: #b9d1ff; }
+
+    .detail-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+    .detail-main p { margin-bottom: 1rem; color: #1e2b41; }
+    .detail-main .focus-headline { font-size: 1.2rem; font-weight: 700; color: #0b1e3a; margin-bottom: .75rem; }
+    .detail-main .highlight {
+        background: #eef4ff; border-radius: 1rem; padding: 1rem 1.5rem;
+        margin: 1.5rem 0; border-left: 4px solid #3b82f6;
+        font-weight: 500; color: #1e3a8a;
+    }
+    .detail-sidebar {
+        background: #f8fafd; border-radius: 1.5rem; padding: 1.25rem;
+        border: 1px solid #dbe7f5;
+    }
+    .detail-sidebar h3 { font-size: 1.1rem; margin-bottom: 1rem; color: #1e2e4a; }
+    .related-item {
+        display: flex; gap: .75rem; padding: .6rem 0;
+        border-bottom: 1px solid #dbe7f5; font-size: .9rem;
+    }
+    .related-item:last-child { border-bottom: none; }
+
+    .footer-update {
+        margin-top: 2.5rem; text-align: center; font-size: .85rem; color: #5e7290;
+        display: flex; justify-content: center; align-items: center; gap: .75rem; flex-wrap: wrap;
+    }
+    .refresh-btn {
+        background: white; border: 1px solid #cdddec; padding: .4rem 1rem;
+        border-radius: 3rem; font-size: .8rem; font-weight: 500; color: #1e4faf;
+        cursor: pointer; transition: all .15s;
+        display: inline-flex; align-items: center; gap: .4rem;
+    }
+    .refresh-btn:hover { background: #eef4ff; border-color: #3b82f6; }
+
+    /* ========== 要闻详情弹窗 ========== */
+    .modal-overlay {
+        display: none; position: fixed; inset: 0;
+        background: rgba(11,30,58,.55); backdrop-filter: blur(3px);
+        z-index: 1000; align-items: center; justify-content: center; padding: 1.5rem;
+    }
+    .modal-overlay.show { display: flex; animation: fadeIn .2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .modal {
+        background: white; border-radius: 1.75rem; max-width: 720px; width: 100%;
+        max-height: 85vh; overflow-y: auto; padding: 2rem; position: relative;
+        box-shadow: 0 25px 60px -12px rgba(0,20,50,.45);
+        animation: slideUp .25s cubic-bezier(.16,1,.3,1);
+    }
+    @keyframes slideUp { from{opacity:0;transform:translateY(24px) scale(.98)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .modal-close {
+        position: absolute; top: 1.25rem; right: 1.25rem;
+        width: 36px; height: 36px; border-radius: 50%;
+        border: 1px solid #e2eaf6; background: #f8fafd; color: #3a5470;
+        font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        transition: all .15s;
+    }
+    .modal-close:hover { background: #fee9e7; border-color: #f5c2c0; color: #b91c1c; transform: rotate(90deg); }
+    .modal-header { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; padding-right: 2.5rem; }
+    .modal-tag {
+        background: #eef4ff; color: #1e4faf; padding: .2rem .75rem;
+        border-radius: 2rem; font-size: .75rem; font-weight: 600; border: 1px solid #b9d1ff;
+    }
+    .modal-time { font-size: .8rem; color: #5e7290; }
+    .modal-title {
+        font-size: 1.5rem; font-weight: 700; color: #0b1e3a;
+        line-height: 1.4; margin-bottom: 1rem; letter-spacing: -.01em;
+    }
+    .modal-summary {
+        font-size: 1rem; color: #2c3e5c; background: #eef4ff;
+        border-left: 3px solid #3b82f6; padding: .9rem 1.2rem;
+        border-radius: .75rem; margin-bottom: 1.5rem; font-weight: 500;
+    }
+    .modal-body p { margin-bottom: 1rem; color: #1e2b41; line-height: 1.7; }
+    .modal-source {
+        margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed #dbe7f5;
+        font-size: .8rem; color: #7a8ca8; font-style: italic;
+    }
+
+    .news-item.clickable {
+        cursor: pointer; transition: all .15s; border-radius: .75rem;
+        padding-left: .5rem; padding-right: .5rem;
+        margin-left: -.5rem; margin-right: -.5rem;
+    }
+    .news-item.clickable:hover { background: #f0f5ff; }
+    .news-item.clickable .news-title::after {
+        content: "›"; display: inline-block; margin-left: .4rem;
+        color: #3b82f6; font-weight: 700; opacity: .5;
+        transition: opacity .15s, transform .15s;
+    }
+    .news-item.clickable:hover .news-title::after { opacity: 1; transform: translateX(3px); }
+
+    @media (max-width: 1000px) {
+        .grid-four { grid-template-columns: repeat(2, 1fr); }
+        .detail-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+        .grid-four { grid-template-columns: 1fr; }
+        .header, .control-bar { flex-direction: column; align-items: stretch; }
+        .title-section h1 { font-size: 1.6rem; }
+        .period-switch { justify-content: center; }
+        .detail-header { flex-direction: column; align-items: flex-start; gap: .75rem; }
+        .modal { padding: 1.5rem; border-radius: 1.25rem; }
+        .modal-title { font-size: 1.2rem; }
+    }
+</style>
+</head>
+<body>
+<div class="app">
+    <header class="header">
+        <div class="title-section">
+            <h1 id="pageTitle">行业动态周报 <span>实时</span></h1>
+            <div class="sub">
+                <span class="live-badge">LIVE</span>
+                <span id="pageSubtitle">每周关键趋势 · 实时更新</span>
+                <span id="pagePeriod" style="color:#7a8ca8;"></span>
+            </div>
+        </div>
+        <div class="time-stamp" id="currentTime">加载中...</div>
+    </header>
+
+    <div class="control-bar">
+        <div class="period-switch">
+            <button id="prevBtn" title="上一期">◀ 上一期</button>
+            <div class="period-display" id="periodDisplay">
+                第 ? 期
+                <span class="date" id="periodDate"></span>
+            </div>
+            <button id="nextBtn" title="下一期">下一期 ▶</button>
+        </div>
+
+        <select class="filter-select" id="issueSelect" title="选择期数"></select>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="搜索关键词（标题、标签、数据、观察…）">
+        </div>
+        <select class="filter-select" id="boardFilter" title="按板块筛选">
+            <option value="all">全部板块</option>
+            <option value="news">📰 本周要闻</option>
+            <option value="metrics">📊 关键数据</option>
+            <option value="insight">🔍 深度观察</option>
+            <option value="previews">📅 下周预告</option>
+            <option value="focus">📌 本周焦点</option>
+        </select>
+        <select class="filter-select" id="tagFilter" title="按标签筛选">
+            <option value="all">全部标签</option>
+        </select>
+        <span class="match-info" id="matchInfo"></span>
+    </div>
+
+    <div class="grid-four">
+        <div class="board" id="board-news">
+            <div class="board-header">
+                <span class="board-icon">📰</span><h2>本周要闻</h2>
+                <span class="board-count" id="count-news">0</span>
+            </div>
+            <div class="board-content" id="boardNews"></div>
+        </div>
+        <div class="board" id="board-metrics">
+            <div class="board-header">
+                <span class="board-icon">📊</span><h2>关键数据</h2>
+                <span class="board-count" id="count-metrics">0</span>
+            </div>
+            <div class="board-content" id="boardData"></div>
+        </div>
+        <div class="board" id="board-insight">
+            <div class="board-header">
+                <span class="board-icon">🔍</span><h2>深度观察</h2>
+            </div>
+            <div class="board-content" id="boardInsight"></div>
+        </div>
+        <div class="board" id="board-previews">
+            <div class="board-header">
+                <span class="board-icon">📅</span><h2>下周预告</h2>
+                <span class="board-count" id="count-previews">0</span>
+            </div>
+            <div class="board-content" id="boardPreview"></div>
+        </div>
+    </div>
+
+    <section class="detail-section" id="detailSection">
+        <div class="detail-header">
+            <h2>深度详情 · 本周焦点</h2>
+            <a href="#" class="back-link" id="backLink">← 返回周报</a>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-main" id="detailMain"></div>
+            <div class="detail-sidebar">
+                <h3>📎 相关阅读</h3>
+                <div id="detailRelated"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer-update">
+        <span>⏱️ 最后更新：<span id="lastUpdate">刚刚</span></span>
+        <button class="refresh-btn" id="refreshBtn">🔄 刷新内容</button>
+    </div>
+</div>
+
+<!-- 要闻详情弹窗 -->
+<div class="modal-overlay" id="newsModal">
+    <div class="modal" role="dialog" aria-modal="true">
+        <button class="modal-close" id="modalClose" aria-label="关闭">✕</button>
+        <div class="modal-header">
+            <span class="modal-tag" id="modalTag"></span>
+            <span class="modal-time" id="modalTime"></span>
+        </div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <div class="modal-summary" id="modalSummary"></div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-source" id="modalSource"></div>
+    </div>
+</div>
+
+<script src="data.js"></script>
+
+<script>
+(function() {
+    const state = { currentIndex: 0, keyword: '', boardFilter: 'all', tagFilter: 'all' };
+
+    function escapeHtml(str) {
+        if (typeof str !== 'string') return str == null ? '' : String(str);
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function highlight(text, keyword) {
+        const safe = escapeHtml(String(text == null ? '' : text));
+        if (!keyword) return safe;
+        const words = keyword.trim().split(/\s+/).filter(Boolean);
+        if (!words.length) return safe;
+        let result = safe;
+        words.forEach(w => {
+            const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            result = result.replace(new RegExp(escaped, 'gi'), m => `<mark>${m}</mark>`);
+        });
+        return result;
+    }
+    function matchesKeyword(text, keyword) {
+        if (!keyword) return true;
+        const words = keyword.trim().split(/\s+/).filter(Boolean);
+        if (!words.length) return true;
+        const lower = String(text == null ? '' : text).toLowerCase();
+        return words.some(w => lower.includes(w.toLowerCase()));
+    }
+    function getCurrentIssue() { return WEEKLY_DATA.issues[state.currentIndex] || null; }
+
+    function getFilteredData() {
+        const issue = getCurrentIssue();
+        if (!issue) return null;
+        const kw = state.keyword, board = state.boardFilter, tag = state.tagFilter;
+
+        let news = (issue.news || []).filter(item => {
+            if (tag !== 'all' && item.tag !== tag) return false;
+            if (kw && !matchesKeyword(item.title, kw) && !matchesKeyword(item.tag, kw)) return false;
+            return true;
+        });
+
+        let metrics = (issue.metrics || []).filter(item => {
+            if (kw && !matchesKeyword(item.label, kw) && !matchesKeyword(item.value, kw)) return false;
+            return true;
+        });
+
+        let insight = issue.insight || {};
+        let insightVisible = true;
+        if (kw && !matchesKeyword(insight.text, kw) && !matchesKeyword(insight.source, kw)) insightVisible = false;
+        if (board !== 'all' && board !== 'insight') insightVisible = false;
+
+        let previews = (issue.previews || []).filter(item => {
+            if (kw && !matchesKeyword(item.title, kw) && !matchesKeyword(item.meta, kw)) return false;
+            return true;
+        });
+
+        let focus = issue.focus || {};
+        let focusVisible = true;
+        if (kw) {
+            const focusText = [focus.headline, focus.summary, focus.highlight, ...(focus.body || []), ...(focus.related || []).map(r => r.text)].join(' ');
+            if (!matchesKeyword(focusText, kw)) focusVisible = false;
+        }
+        if (board !== 'all' && board !== 'focus') focusVisible = false;
+
+        return { issue, news, metrics, insight, insightVisible, previews, focus, focusVisible };
+    }
+
+    // 渲染要闻（带弹窗）
+    function renderNews(data) {
+        const el = document.getElementById('boardNews');
+        const cnt = document.getElementById('count-news');
+        if (!el) return;
+        if (!data.news.length) {
+            el.innerHTML = '<div class="empty-hint">暂无匹配要闻</div>';
+            cnt.textContent = '0';
+            return;
+        }
+        el.innerHTML = data.news.map((n, i) => {
+            const clickable = n.detail ? 'clickable' : '';
+            return `
+                <div class="news-item ${clickable}" data-news-index="${i}">
+                    <div class="news-title">${highlight(n.title, state.keyword)}</div>
+                    <div class="news-meta">
+                        <span class="tag">${escapeHtml(n.tag || '')}</span>
+                        ${escapeHtml(n.time || '')}
+                    </div>
+                </div>`;
+        }).join('');
+        cnt.textContent = data.news.length;
+
+        el.querySelectorAll('.news-item.clickable').forEach(itemEl => {
+            itemEl.addEventListener('click', () => {
+                const idx = parseInt(itemEl.dataset.newsIndex, 10);
+                openNewsModal(data.news[idx]);
+            });
+        });
+    }
+
+    function renderMetrics(data) {
+        const el = document.getElementById('boardData');
+        const cnt = document.getElementById('count-metrics');
+        if (!el) return;
+        if (!data.metrics.length) { el.innerHTML = '<div class="empty-hint">暂无匹配数据</div>'; cnt.textContent = '0'; return; }
+        el.innerHTML = data.metrics.map(m => `
+            <div class="data-row">
+                <span class="data-label">${highlight(m.label, state.keyword)}</span>
+                <span class="data-value">${highlight(m.value, state.keyword)}</span>
+                <span class="data-trend ${m.trendClass || 'neutral'}">${escapeHtml(m.trend || '')}</span>
+            </div>`).join('');
+        cnt.textContent = data.metrics.length;
+    }
+
+    function renderInsight(data) {
+        const el = document.getElementById('boardInsight');
+        if (!el) return;
+        if (!data.insightVisible) { el.innerHTML = '<div class="empty-hint">暂无匹配观察</div>'; return; }
+        el.innerHTML = `
+            <div class="insight-text">${highlight(data.insight.text || '', state.keyword)}</div>
+            <div class="news-meta" style="margin-top:.5rem;">${highlight(data.insight.source || '', state.keyword)}</div>`;
+    }
+
+    function renderPreviews(data) {
+        const el = document.getElementById('boardPreview');
+        const cnt = document.getElementById('count-previews');
+        if (!el) return;
+        if (!data.previews.length) { el.innerHTML = '<div class="empty-hint">暂无匹配预告</div>'; cnt.textContent = '0'; return; }
+        el.innerHTML = data.previews.map(p => `
+            <div class="news-item">
+                <div class="news-title">${highlight(p.title, state.keyword)}</div>
+                <div class="news-meta">${highlight(p.meta || '', state.keyword)}</div>
+            </div>`).join('');
+        cnt.textContent = data.previews.length;
+    }
+
+    function renderDetail(data) {
+        const main = document.getElementById('detailMain');
+        const rel = document.getElementById('detailRelated');
+        const sec = document.getElementById('detailSection');
+        if (!main || !rel) return;
+        if (!data.focusVisible) {
+            sec.classList.add('dimmed');
+            main.innerHTML = '<div class="empty-hint">暂无匹配焦点内容</div>';
+            rel.innerHTML = '';
+            return;
+        }
+        sec.classList.remove('dimmed');
+        const f = data.focus;
+        const bodyHtml = (f.body || []).map(p => `<p>${highlight(p, state.keyword)}</p>`).join('');
+        main.innerHTML = `
+            <div class="focus-headline">${highlight(f.headline || '', state.keyword)}</div>
+            <p>${highlight(f.summary || '', state.keyword)}</p>
+            ${f.highlight ? `<div class="highlight">${highlight(f.highlight, state.keyword)}</div>` : ''}
+            ${bodyHtml}`;
+        rel.innerHTML = (f.related || []).map(r => `
+            <div class="related-item">
+                <span>${escapeHtml(r.emoji || '📄')}</span>
+                <span>${highlight(r.text || '', state.keyword)}</span>
+            </div>`).join('') || '<div class="empty-hint">暂无相关阅读</div>';
+    }
+
+    // 打开要闻详情弹窗
+    function openNewsModal(news) {
+        if (!news || !news.detail) return;
+        const d = news.detail;
+
+        document.getElementById('modalTag').textContent = news.tag || '';
+        document.getElementById('modalTime').textContent = news.time || '';
+        document.getElementById('modalTitle').textContent = news.title || '';
+        document.getElementById('modalSummary').textContent = d.summary || '';
+
+        const bodyEl = document.getElementById('modalBody');
+        if (d.body && d.body.length) {
+            bodyEl.innerHTML = d.body.map(p => `<p>${escapeHtml(p)}</p>`).join('');
+        } else {
+            bodyEl.innerHTML = '<p>暂无详细内容</p>';
+        }
+
+        document.getElementById('modalSource').textContent = d.source ? `来源：${d.source}` : '';
+
+        const overlay = document.getElementById('newsModal');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeNewsModal() {
+        const overlay = document.getElementById('newsModal');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function updatePeriodUI() {
+        const issue = getCurrentIssue();
+        const total = WEEKLY_DATA.issues.length;
+        document.getElementById('periodDisplay').innerHTML =
+            `${issue ? escapeHtml(issue.period) : '无数据'}<span class="date">${issue ? escapeHtml(issue.publishDate || '') : ''}</span>`;
+        document.getElementById('prevBtn').disabled = state.currentIndex >= total - 1;
+        document.getElementById('nextBtn').disabled = state.currentIndex <= 0;
+        const periodEl = document.getElementById('pagePeriod');
+        if (periodEl) periodEl.textContent = issue ? `· ${escapeHtml(issue.period)}` : '';
+        syncIssueSelect();
+    }
+
+    function buildTagOptions() {
+        const issue = getCurrentIssue();
+        const sel = document.getElementById('tagFilter');
+        sel.innerHTML = '<option value="all">全部标签</option>';
+        if (!issue) return;
+        const tags = [...new Set((issue.news || []).map(n => n.tag).filter(Boolean))];
+        tags.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t; opt.textContent = t;
+            sel.appendChild(opt);
+        });
+    }
+
+    function buildIssueOptions() {
+        const sel = document.getElementById('issueSelect');
+        if (!sel) return;
+        sel.innerHTML = WEEKLY_DATA.issues.map((issue, idx) =>
+            `<option value="${idx}">${escapeHtml(issue.period || '第 ' + (idx + 1) + ' 期')}</option>`
+        ).join('');
+        sel.value = state.currentIndex;
+    }
+
+    function syncIssueSelect() {
+        const sel = document.getElementById('issueSelect');
+        if (sel) sel.value = state.currentIndex;
+    }
+
+    function renderAll() {
+        const data = getFilteredData();
+        if (!data) return;
+        renderNews(data);
+        renderMetrics(data);
+        renderInsight(data);
+        renderPreviews(data);
+        renderDetail(data);
+        updatePeriodUI();
+
+        const total = data.news.length + data.metrics.length + (data.insightVisible ? 1 : 0) + data.previews.length + (data.focusVisible ? 1 : 0);
+        document.getElementById('matchInfo').innerHTML = (state.keyword || state.tagFilter !== 'all' || state.boardFilter !== 'all')
+            ? `匹配 <strong>${total}</strong> 条` : '';
+    }
+
+    function bindEvents() {
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (state.currentIndex < WEEKLY_DATA.issues.length - 1) {
+                state.currentIndex++; state.tagFilter = 'all';
+                buildTagOptions(); renderAll(); syncIssueSelect();
+            }
+        });
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (state.currentIndex > 0) {
+                state.currentIndex--; state.tagFilter = 'all';
+                buildTagOptions(); renderAll(); syncIssueSelect();
+            }
+        });
+        document.getElementById('searchInput').addEventListener('input', e => {
+            state.keyword = e.target.value; renderAll();
+        });
+        document.getElementById('boardFilter').addEventListener('change', e => {
+            state.boardFilter = e.target.value; renderAll();
+        });
+        document.getElementById('tagFilter').addEventListener('change', e => {
+            state.tagFilter = e.target.value; renderAll();
+        });
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            renderAll();
+            document.getElementById('lastUpdate').textContent = '刚刚';
+        });
+        document.getElementById('backLink').addEventListener('click', e => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // 期数下拉框
+        const issueSel = document.getElementById('issueSelect');
+        if (issueSel) {
+            issueSel.addEventListener('change', e => {
+                const idx = parseInt(e.target.value, 10);
+                if (!isNaN(idx) && idx >= 0 && idx < WEEKLY_DATA.issues.length) {
+                    state.currentIndex = idx;
+                    state.tagFilter = 'all';
+                    buildTagOptions(); renderAll(); syncIssueSelect();
+                }
+            });
+        }
+
+        // 弹窗关闭
+        const modalOverlay = document.getElementById('newsModal');
+        const modalClose = document.getElementById('modalClose');
+        if (modalClose) modalClose.addEventListener('click', closeNewsModal);
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeNewsModal();
+            });
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('show')) closeNewsModal();
+        });
+    }
+
+    function updateClock() {
+        const el = document.getElementById('currentTime');
+        if (el) el.textContent = new Date().toLocaleString('zh-CN');
+    }
+
+    function init() {
+        if (typeof WEEKLY_DATA === 'undefined' || !WEEKLY_DATA.issues || !WEEKLY_DATA.issues.length) {
+            document.getElementById('boardNews').innerHTML = '<div class="empty-hint">⚠️ 数据加载失败，请检查 data.js 是否正确引入</div>';
+            console.error('WEEKLY_DATA 未加载');
+            return;
+        }
+        buildIssueOptions();
+        buildTagOptions();
+        renderAll();
+        bindEvents();
+        updateClock();
+        setInterval(updateClock, 1000);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
